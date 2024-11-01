@@ -16,6 +16,16 @@ jobs:
       - name: Build Docker image
         run: docker build -t my-tomcat-app .
 
+      - name: Login to EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan - H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+
       - name: Push Docker image to EC2
         run: |
           docker save my-tomcat-app | bzip2 | ssh -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_HOST }} 'bunzip2 | docker load'
