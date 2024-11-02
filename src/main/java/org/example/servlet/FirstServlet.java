@@ -15,7 +15,7 @@ public class FirstServlet extends HttpServlet
     @Override
     public void init(ServletConfig config) throws ServletException
     {
-        System.out.println("init() 실행됨!");
+        System.out.println("init() 실행됨! ");
     }
 
     @Override
